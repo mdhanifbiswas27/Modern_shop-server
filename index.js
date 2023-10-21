@@ -29,14 +29,14 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
-
+// To get all product at once time
     const productsCollection = client.db('productDB').collection('products');
  app.get('/products', async(req, res)=>{
     const cursor = productsCollection.find();
     const result = await cursor.toArray();
     res.send(result);
  })
-
+// to get specific products
  app.get('/products/:brand',async(req, res)=>{
     const brand =req.params.brand;
     
@@ -45,7 +45,7 @@ async function run() {
     res.send(product);
  })
 
-
+// to add new product
  app.post('/products', async(req, res)=>{
      const newProduct =req.body;
      console.log(newProduct);
@@ -57,7 +57,7 @@ async function run() {
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
-    // Ensures that the client will close when you finish/error
+    
     // await client.close();
   }
 }
