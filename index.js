@@ -44,6 +44,25 @@ app.get('/products/:id',async(req, res)=>{
   const product = await productsCollection.findOne(query);
   res.send(product);
 })
+// update a product
+app.put('/products/:id', async(req, res)=>{
+  const id = req.params.id;
+  const filter ={_id: new ObjectId(id) };
+  const options ={ upsert: true};
+  const updatedProduct = req.body;
+  const product ={
+    $set:{
+      name :updatedProduct.name ,
+      brand:updatedProduct.brand,
+        photo:updatedProduct.photo,
+        type: updatedProduct.type,
+        price:updatedProduct.price, 
+        rating:updatedProduct.rating
+    }
+  }
+  const result = await productsCollection.updateOne(filter,product,options);
+  res.send(result);
+})
 
 // to get specific products basis on brand
  app.get('/products/:brand',async(req, res)=>{
