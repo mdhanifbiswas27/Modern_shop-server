@@ -29,13 +29,22 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
-// To get all product at once time
+
     const productsCollection = client.db('productDB').collection('products');
+    const shopUserCollection =client.db('productDB').collection('shopUser');
+    const cartCollection =client.db('productDB').collection('userCart')
+// To get all product at once time
  app.get('/products', async(req, res)=>{
     const cursor = productsCollection.find();
     const result = await cursor.toArray();
     res.send(result);
  })
+//  to get all cart item
+app.get('/userCart', async(req, res)=>{
+  const cursor= cartCollection.find();
+  const result = await cursor.toArray();
+  res.send(result);
+})
 //  get product on id
 app.get('/products/:id',async(req, res)=>{
   const id =req.params.id
@@ -81,6 +90,21 @@ app.put('/products/:id', async(req, res)=>{
      res.send(result);
  })
 
+//  add user
+app.post('/shopUser', async(req, res)=>{
+   const shopUser = req.body;
+    
+   const result = await shopUserCollection.insertOne(shopUser);
+   res.send(result);
+})
+
+app.post('/userCart', async (req, res)=>{
+  const userCart = req.body;
+
+  const result = await cartCollection.insertOne(userCart);
+  res.send(result);
+})
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
@@ -94,9 +118,12 @@ run().catch(console.dir);
 
 // -------------------------------------------------
 app.get('/',(req, res)=>{
-    res.send('coffee making server is running ')
+    res.send('assignment server is running ')
 })
 
 app.listen(port, ()=>{
-    console.log(`coffee server is running on port:${port}`)
+    console.log(`assignment server running on port:${port}`)
 })
+
+// await client.connect()
+// await client.db()
