@@ -98,10 +98,19 @@ app.post('/shopUser', async(req, res)=>{
    res.send(result);
 })
 
+// add product to cart
 app.post('/userCart', async (req, res)=>{
   const userCart = req.body;
 
   const result = await cartCollection.insertOne(userCart);
+  res.send(result);
+})
+
+// delete a cart item
+app.delete('/userCart/:id' , async(req, res)=>{
+   const id = req.params.id;
+  const query = {_id: new ObjectId(id)}
+  const result = await cartCollection.deleteOne(query);
   res.send(result);
 })
 
